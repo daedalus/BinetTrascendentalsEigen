@@ -24,11 +24,8 @@ def binet(a,b,n):
 
 
 def gen_serie(a,b,l):
-  tmp = []
-  for c in range(0,l):
-     tmp.append(str(binet(a,b,c)))
-  s = ",".join(tmp)
-  return s
+    tmp = [str(binet(a,b,c)) for c in range(0,l)]
+    return ",".join(tmp)
 
 
 def gen_series(l):
@@ -58,13 +55,16 @@ def gen_series_tras(l):
         for j in range(i,lt):
             b = tras[j]
             if a != b:
-                series.append((i,j,0,gen_serie(a,b,l)))  
-                series.append((i,j,1,gen_serie(a*b,a,l)))
-                series.append((i,j,2,gen_serie(a*b,b,l)))
-                series.append((i,j,3,gen_serie(a*b,a/b,l)))
-                series.append((i,j,4,gen_serie(a*b,b/a,l)))
-                series.append((i,j,5,gen_serie(a+b,a-b,l)))
-
+                series.extend(
+                    (
+                        (i, j, 0, gen_serie(a, b, l)),
+                        (i, j, 1, gen_serie(a * b, a, l)),
+                        (i, j, 2, gen_serie(a * b, b, l)),
+                        (i, j, 3, gen_serie(a * b, a / b, l)),
+                        (i, j, 4, gen_serie(a * b, b / a, l)),
+                        (i, j, 5, gen_serie(a + b, a - b, l)),
+                    )
+                )
     for i,j,k,s in series:
         s = s.replace("0,1,","")
         sys.stderr.write("[%d %d %d] %s\n" % (i,j,k,s))
